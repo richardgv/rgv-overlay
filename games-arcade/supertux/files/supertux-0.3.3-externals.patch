@@ -1,0 +1,105 @@
+Author: Nathan Phillip Brink <ohnobinki@ohnopublishing.net>
+Purpose: To enable supertux to link against system-installed libsquirrel (as installed with pkg-config files by dev-lang/squirrel), tinygettext (whose API will someday change to be more ABI-friendly), and findlocale (which grumbel claims is pointless to externalize). This patch is not upstreamable because 1. upstream squirrel doesn't support system-installed squirrel at all and 2. tinygettext's API is C++ atm and will change.
+
+diff -r e2cf0ccf00c7 CMakeLists.txt
+--- a/CMakeLists.txt	Thu May 13 11:06:57 2010 -0400
++++ b/CMakeLists.txt	Fri May 14 02:20:14 2010 -0400
+@@ -102,6 +102,21 @@
+   SET(HAVE_LIBCURL TRUE)
+ ENDIF(CURL_FOUND)
+ 
++INCLUDE(FindPkgConfig)
++pkg_check_modules(TINYGETTEXT tinygettext>=0.1)
++IF(TINYGETTEXT_FOUND)
++	SET(TINYGETTEXT_SOURCES_CXX "")
++	ADD_DEFINITIONS(${TINYGETTEXT_CFLAGS})
++ELSE(TINYGETTEXT_FOUND)
++	include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/)
++	FILE(GLOB TINYGETTEXT_SOURCES_CXX RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} external/tinygettext/tinygettext/*.cpp)
++	SET_SOURCE_FILES_PROPERTIES(${TINYGETTEXT_SOURCES_CXX} PROPERTIES COMPILE_DEFINITIONS HAVE_SDL)
++ENDIF(TINYGETTEXT_FOUND)
++
++INCLUDE(FindPkgConfig)
++pkg_check_modules(FINDLOCALE REQUIRED findlocale>=0.47)
++ADD_DEFINITIONS(${FINDLOCALE_CFLAGS})
++
+ #FIND_PACKAGE(ICONV REQUIRED)
+ #INCLUDE_DIRECTORIES(${ICONV_INCLUDE_DIR})
+ #LINK_LIBRARIES(${ICONV_LIBRARY})
+@@ -149,31 +164,41 @@
+ 
+ ## Also execute instructions in src/squirrel/CMakeLists.txt
+ 
+-ADD_SUBDIRECTORY(external/squirrel)
++INCLUDE(FindPkgConfig)
+ 
+-## Add squirrel lib dir to search path
++## check for external squirrel. To meet grumbel's requirements, must
++## default to internal squirrel.
++OPTION(EXTERNAL_LIBSQUIRREL "Build against external libsquirel libraries" OFF)
+ 
+-LINK_DIRECTORIES(external/squirrel)
++IF(EXTERNAL_LIBSQUIRREL)
++  pkg_check_modules(LIBSQUIRREL REQUIRED libsquirrel>=2.2.4 libsqstdlib>=2.2.4)
++
++  ## libs are handled much further on
++  ADD_DEFINITIONS(${LIBSQUIRREL_CFLAGS})
++ELSE(EXTERNAL_LIBSQUIRREL)
++  ADD_SUBDIRECTORY(external/squirrel)
++
++  ## Add squirrel lib dir to search paths
++
++  LINK_DIRECTORIES(external/squirrel)
++
++  include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/squirrel/include/)
++  SET(LIBSQUIRREL_LIBRARIES squirrel)
++ENDIF(EXTERNAL_LIBSQUIRREL)
+ 
+ ## Some additional include paths
+ 
+ include_directories (${CMAKE_BINARY_DIR}/)
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR}/src/)
+-include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/squirrel/include/)
+-include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/tinygettext/)
+-include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/findlocale/)
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/obstack/)
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR}/external/binreloc/)
+ 
+ ## Build list of sources for supertux binary
+ 
+-FILE(GLOB SUPERTUX_SOURCES_C RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} external/obstack/*.c external/findlocale/findlocale.c)
++FILE(GLOB SUPERTUX_SOURCES_C RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} external/obstack/*.c)
+ 
+ FILE(GLOB SUPERTUX_SOURCES_CXX RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/main.cpp src/*/*.cpp src/supertux/menu/*.cpp src/video/sdl/*.cpp)
+ 
+-FILE(GLOB TINYGETTEXT_SOURCES_CXX RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} external/tinygettext/tinygettext/*.cpp)
+-SET_SOURCE_FILES_PROPERTIES(${TINYGETTEXT_SOURCES_CXX} PROPERTIES COMPILE_DEFINITIONS HAVE_SDL)
+-
+ IF(HAVE_OPENGL)
+   FILE(GLOB SUPERTUX_OPENGL_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/video/gl/*.cpp)
+   SET(SUPERTUX_SOURCES_CXX ${SUPERTUX_SOURCES_CXX} ${SUPERTUX_OPENGL_SOURCES})
+@@ -333,12 +358,13 @@
+ 
+ ## Link supertux binary with squirrel and other libraries
+ 
+-TARGET_LINK_LIBRARIES(supertux2 squirrel)
++TARGET_LINK_LIBRARIES(supertux2 ${LIBSQUIRREL_LIBRARIES})
+ TARGET_LINK_LIBRARIES(supertux2 ${SDL_LIBRARY})
+ TARGET_LINK_LIBRARIES(supertux2 ${SDLIMAGE_LIBRARY})
+ TARGET_LINK_LIBRARIES(supertux2 ${OPENAL_LIBRARY})
+ TARGET_LINK_LIBRARIES(supertux2 ${OGGVORBIS_LIBRARIES})
+ TARGET_LINK_LIBRARIES(supertux2 ${PHYSFS_LIBRARY})
++TARGET_LINK_LIBRARIES(supertux2 ${FINDLOCALE_LDFLAGS})
+ IF(HAVE_OPENGL)
+     TARGET_LINK_LIBRARIES(supertux2 ${OPENGL_LIBRARY})
+     TARGET_LINK_LIBRARIES(supertux2 ${GLEW_LIBRARY})
+@@ -346,6 +372,9 @@
+ IF(HAVE_LIBCURL)
+   TARGET_LINK_LIBRARIES(supertux2 ${CURL_LIBRARY})
+ ENDIF(HAVE_LIBCURL)
++IF(TINYGETTEXT_FOUND)
++    TARGET_LINK_LIBRARIES(supertux2 ${TINYGETTEXT_LDFLAGS})
++ENDIF(TINYGETTEXT_FOUND)
+ 
+ ## Install stuff
+ 

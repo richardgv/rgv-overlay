@@ -1,0 +1,31 @@
+diff --git a/GNUmakefile b/GNUmakefile
+index 41d5573..41fba72 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -7,7 +7,7 @@ man1dir = $(mandir)/man1
+ 
+ INSTALL = install
+ 
+-CFLAGS = -Wall $(XFLAGS)
++CFLAGS += -Wall $(XFLAGS)
+ 
+ -include Makefile.local
+ 
+diff --git a/uxnet.c b/uxnet.c
+index 4467d08..ce3cf80 100644
+--- a/uxnet.c
++++ b/uxnet.c
+@@ -207,6 +207,13 @@ SockAddr sk_namelookup(const char *host, char **canonicalname, int address_famil
+     hints.ai_addr = NULL;
+     hints.ai_canonname = NULL;
+     hints.ai_next = NULL;
++    {
++	char hostname[80] = "";
++	hostname[79] = '\0';
++	if (!gethostname(hostname, 79) && strlen(hostname)
++		&& !strcmp(hostname, host))
++	    host = "localhost";
++    }
+     err = getaddrinfo(host, NULL, &hints, &ret->ais);
+     if (err != 0) {
+ 	ret->error = gai_strerror(err);

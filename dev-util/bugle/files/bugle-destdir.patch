@@ -1,0 +1,121 @@
+diff --git a/doc/DocBook/SConscript b/doc/DocBook/SConscript
+index 1d8ca2c..fa35c0e 100644
+--- a/doc/DocBook/SConscript
++++ b/doc/DocBook/SConscript
+@@ -46,14 +46,14 @@ if 'docs' in aspects['parts']:
+             dir = 'man',
+             package_sources = package_sources)
+ 
+-    env.Install(aspects['docdir'], 'html/single.html')
+-    env.Install(aspects['docdir'], 'html/bugle.css')
+-    env.Install(aspects['docdir'], 'html/chunked')
++    env.Install(os.environ.get("DESTDIR", "") + aspects['docdir'], 'html/single.html')
++    env.Install(os.environ.get("DESTDIR", "") + aspects['docdir'], 'html/bugle.css')
++    env.Install(os.environ.get("DESTDIR", "") + aspects['docdir'], 'html/chunked')
+ 
+     # For some reason trying to install from the top level just doesn't do
+     # anything.
+     # env.InstallAs(aspects['mandir'], 'man')
+-    env.Install(aspects['mandir'] + '/man1', Glob('man/man1/*.1'))
+-    env.Install(aspects['mandir'] + '/man3', Glob('man/man3/*.3'))
+-    env.Install(aspects['mandir'] + '/man5', Glob('man/man5/*.5'))
+-    env.Install(aspects['mandir'] + '/man7', Glob('man/man7/*.7'))
++    env.Install(os.environ.get("DESTDIR", "") + aspects['mandir'] + '/man1', Glob('man/man1/*.1'))
++    env.Install(os.environ.get("DESTDIR", "") + aspects['mandir'] + '/man3', Glob('man/man3/*.3'))
++    env.Install(os.environ.get("DESTDIR", "") + aspects['mandir'] + '/man5', Glob('man/man5/*.5'))
++    env.Install(os.environ.get("DESTDIR", "") + aspects['mandir'] + '/man7', Glob('man/man7/*.7'))
+diff --git a/site_scons/site_tools/buglewrappers.py b/site_scons/site_tools/buglewrappers.py
+index bb2bbba..a5ddda7 100644
+--- a/site_scons/site_tools/buglewrappers.py
++++ b/site_scons/site_tools/buglewrappers.py
+@@ -74,7 +74,7 @@ def _build_shared_library(env, binfmt, target, source, bindir = None, libdir = N
+ 
+                 if libdir is not None:
+                     install_env = env.Clone(OLDINSTALL = env['INSTALL'], INSTALL = copyFunc)
+-                    targets = install_env.Install(target = libdir, source = shl_list + soname_target + base_target)
++                    targets = install_env.Install(target = os.environ.get("DESTDIR", "") + libdir, source = shl_list + soname_target + base_target)
+                     if not SCons.Script.GetOption('install_sandbox'):
+                         install_env.AddPostAction(targets, SCons.Action.Action('-ldconfig', '$LDCONFIGCOMSTR'))
+                 return base_target
+@@ -84,7 +84,7 @@ def _build_shared_library(env, binfmt, target, source, bindir = None, libdir = N
+             shl_list = env.SharedLibrary(target, source, **kw)
+             if libdir is not None:
+                 install_env = env.Clone(OLDINSTALL = env['INSTALL'], INSTALL = copyFunc)
+-                install_env.Install(target = libdir, source = shl_list)
++                install_env.Install(target = os.environ.get("DESTDIR", "") + libdir, source = shl_list)
+             return shl_list
+     elif binfmt == 'pe':
+         if 'msvc' in env['TOOLS']:
+@@ -94,14 +94,14 @@ def _build_shared_library(env, binfmt, target, source, bindir = None, libdir = N
+ 
+             # No symlinks required, so no need to replace the env
+             if libdir is not None:
+-                env.Install(target = libdir, source = [lib, exp])
++                env.Install(target = os.environ.get("DESTDIR", "") + libdir, source = [lib, exp])
+             if bindir is not None:
+-                env.Install(target = bindir, source = dll)
++                env.Install(target = os.environ.get("DESTDIR", "") + bindir, source = dll)
+             return [lib]
+         elif 'mingw' in env['TOOLS']:
+             outputs = env.SharedLibrary(target, source, **kw)
+             if bindir is not None:
+-                env.Install(target = bindir, source = outputs[0])
++                env.Install(target = os.environ.get("DESTDIR", "") + bindir, source = outputs[0])
+             return [outputs[0]]
+         else:
+             raise NotImplemented, 'Do not know how to build shared libraries for PE without MSVC'
+diff --git a/src/SConscript b/src/SConscript
+index d8c20c5..b04fcc0 100644
+--- a/src/SConscript
++++ b/src/SConscript
+@@ -292,7 +292,7 @@ envs['tu'].ApitablesH(target = ['apitables.h'], source = [File('budgielib/define
+ substs = get_substs(aspects)
+ envs['host'].SubstFile('include/bugle/porting.h', 'include/bugle/porting.h.in', substs)
+ bugle_pc = envs['host'].SubstFile('bugle.pc', 'bugle.pc.in', substs)
+-envs['host'].Install(aspects['libdir'] + '/pkgconfig', source = bugle_pc)
++envs['host'].Install(os.environ.get("DESTDIR", "") + aspects['libdir'] + '/pkgconfig', source = bugle_pc)
+ 
+ targets['bugleutils'].update({
+     'target': 'bugleutils',
+diff --git a/src/filters/SConscript b/src/filters/SConscript
+index fdc77f5..972c089 100644
+--- a/src/filters/SConscript
++++ b/src/filters/SConscript
+@@ -14,7 +14,7 @@ if 'interceptor' in aspects['parts']:
+     def simple_filters(env, names):
+         for name in names:
+             module = env.LoadableModule(name, [name + '.c'])
+-            filter_env.Install(aspects['pkglibdir'], module)
++            filter_env.Install(os.environ.get("DESTDIR", "") + aspects['pkglibdir'], module)
+ 
+     simple_filters(filter_env, [
+             'common',
+@@ -40,7 +40,7 @@ if 'interceptor' in aspects['parts']:
+                 'stats_fragments',
+                 'showstats'])
+         eps_module = filter_env.LoadableModule('eps', ['eps.c', '../gl2ps/gl2ps.c'])
+-        filter_env.Install(aspects['pkglibdir'], eps_module)
++        filter_env.Install(os.environ.get("DESTDIR", "") + aspects['pkglibdir'], eps_module)
+ 
+     if aspects['glwin'] == 'glx':
+         # Currently very GLX-heavy
+diff --git a/src/gldb/SConscript b/src/gldb/SConscript
+index cd4570e..7a8de6c 100644
+--- a/src/gldb/SConscript
++++ b/src/gldb/SConscript
+@@ -57,4 +57,4 @@ if 'debugger' in aspects['parts']:
+         'gldb-gui.c',
+         gldb_shared], LIBS = [targets['bugleutils'].out, '$LIBS'])
+ 
+-    gldb_env.Install(aspects['bindir'], gldb_gui)
++    gldb_env.Install(os.environ.get("DESTDIR", "") + aspects['bindir'], gldb_gui)
+diff --git a/src/include/SConscript b/src/include/SConscript
+index a7f6bb1..8d0536d 100644
+--- a/src/include/SConscript
++++ b/src/include/SConscript
+@@ -10,4 +10,4 @@ for dir in [
+         'bugle/glx',
+         'bugle/wgl',
+         'budgie']:
+-    envs['host'].Install(aspects['includedir'] + '/bugle/' + dir, source = Glob(dir + '/*.h'))
++    envs['host'].Install(os.environ.get("DESTDIR", "") + aspects['includedir'] + '/bugle/' + dir, source = Glob(dir + '/*.h'))
