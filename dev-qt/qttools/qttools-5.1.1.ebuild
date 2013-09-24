@@ -8,7 +8,7 @@ inherit qt5-build
 
 # makeqpf don't build without qtbase source around
 # SRC_URI+=" http://releases.qt-project.org/qt5/${PV}/submodules/qtbase-opensource-src-${PV}.tar.xz"
-SRC_URI+=" http://download.qt-project.org/development_releases/qt/${PV%.*}/${PV/_/-}/submodules/qtbase-opensource-src-${PV/_/-}.tar.xz"
+SRC_URI+=" http://download.qt-project.org/official_releases/qt/${PV%.*}/${PV/_/-}/submodules/qtbase-opensource-src-${PV/_/-}.tar.xz"
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 
@@ -23,7 +23,7 @@ IUSE="accessibility"
 DEPEND="
 	~dev-qt/qtcore-${PV}[debug=]
 	~dev-qt/qtgui-${PV}[accessibility=,debug=]
-	~dev-qt/qtwidgets-${PV}[accessibility=,debug=]
+	~dev-qt/qtwidgets-${PV}[accessibility(+)=,debug=]
 	~dev-qt/qtnetwork-${PV}[debug=]
 	~dev-qt/qtsql-${PV}[debug=]
 	~dev-qt/qtprintsupport-${PV}[debug=]
