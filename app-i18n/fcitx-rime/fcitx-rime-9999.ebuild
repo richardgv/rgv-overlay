@@ -24,7 +24,8 @@ DEPEND="${RDEPEND}"
 
 src_prepare() {
 	# dont build data resource here, already provided by app-i18n/rime-data
-	sed -i -e 's|add_subdirectory(data)||' CMakeLists.txt || die
+	# sed -i -e 's|add_subdirectory(data)||' CMakeLists.txt || die
+	cmake-utils_src_prepare
 }
 
 src_configure() {
