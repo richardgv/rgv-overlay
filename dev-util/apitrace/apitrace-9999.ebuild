@@ -93,18 +93,22 @@ my_android_src_configure() {
 	mycmakeargs=(
 		-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain/android.toolchain.cmake
 		-DANDROID_NDK=/opt/android-ndk
+		-DANDROID_NATIVE_API_LEVEL=android-9
+		-DENABLE_GUI=OFF
+		-DENABLE_CLI=OFF
+		-DENABLE_EGL=ON
 	)
 	case "${MULTIBUILD_VARIANT}" in
 		android-x86)
 			mycmakeargs+=(
 				-DANDROID_ABI=x86
-				-ANDROID_TOOLCHAIN_NAME=x86-clang3.2
+				-DANDROID_TOOLCHAIN_NAME=x86-4.8
 				)
 			;;
 		android-armeabi-v7a)
 			mycmakeargs+=(
 				-DANDROID_ABI=armeabi-v7a
-				-ANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-clang3.2
+				-DANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.8
 				)
 			;;
 	esac
@@ -130,9 +134,15 @@ src_compile() {
 src_install() {
 	cmake-multilib_src_install
 
+	my_android_src_install() {
+		exeinto "/usr/$(get_libdir)/${PN}/wrappers/${MULTIBUILD_VARIANT}"
+		doexe "${S}/libs/${MULTIBUILD_VARIANT/#android-}"/*.so
+	}
+
 	# dobin "${CMAKE_BUILD_DIR}"/{glretrace,apitrace}
 	# use qt4 && dobin "${CMAKE_BUILD_DIR}"/qapitrace
 
+	my_android_foreach_variant my_android_src_install
 	# for ABI in $(get_install_abis) ; do
 	# 	CMAKE_BUILD_DIR="${WORKDIR}/${P}_build-${ABI}"
 	# 	exeinto /usr/$(get_libdir)/${PN}/wrappers

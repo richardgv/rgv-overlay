@@ -28,7 +28,7 @@ DEPEND="
 	~dev-qt/qtsql-${PV}[debug=]
 	~dev-qt/qtprintsupport-${PV}[debug=]
 	~dev-qt/qtxml-${PV}[debug=]
-	!!dev-qt/designer:5
+	dev-qt/designer:5
 "
 RDEPEND="${DEPEND}"
 
@@ -37,10 +37,9 @@ QT5_TARGET_SUBDIRS=(
 	src/assistant
 	src/pixeltool
 	src/qtestlib
-	src/designer
 	src/linguist
 	src/qdbus
-	src/makeqpf
+	src/qtpaths
 
 	src/qtconfig
 	src/qev
@@ -50,6 +49,10 @@ QT5_TARGET_SUBDIRS=(
 
 # Can't work on Linux
 # src/macdeployqt
+
+# Dropped?
+# https://qt.gitorious.org/qt/qtbase/commit/d7e424ee6686f663f5134666e09c2875bb3e42b6
+# src/makeqpf
 
 # Seemingly those should be included in qtconcurrent?
 # src/qtconcurrent/codegenerator
@@ -65,6 +68,9 @@ src_unpack() {
 }
 
 src_prepare() {
+	# Fix qtconfig
+	# sed -i 's/\(#if defined(Q_WS_X11) && !defined(QT_NO_XIM)\)$/\1 && 0' ${S}/src/qtconfig/mainwindow.cpp || die
+
 	# Fix sandbox violation when building with qt-tools already installed
 	find "${S}" -name '*.pro' -exec sed -i 's/\$\$QT\.designer\.bins//' '{}' + || die
 
