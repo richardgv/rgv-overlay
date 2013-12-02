@@ -18,7 +18,7 @@ else
 	KEYWORDS="~amd64 ~x86"
 fi
 
-IUSE="accessibility"
+IUSE="+accessibility"
 
 DEPEND="
 	~dev-qt/qtcore-${PV}[debug=]
