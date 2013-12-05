@@ -1,8 +1,8 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-themes/zukitwo/zukitwo-2012.12.16.ebuild,v 1.1 2012/12/27 19:14:24 tetromino Exp $
+# Header: $
 
-EAPI="5"
+EAPI=5
 
 inherit bzr
 
@@ -26,7 +26,7 @@ DEPEND="app-arch/unzip"
 
 # S="${WORKDIR}"
 
-DOCS=( COPYING )
+# DOCS=( COPYING )
 
 src_prepare() {
 	# Gentoo uses normal nautilus, not nautilus-elementary
@@ -36,6 +36,6 @@ src_prepare() {
 
 src_install() {
 	insinto /usr/share/themes
-	doins -r Zukitwo Zukitwo-Shell Zukiwi
+	doins -r Zukitre Zukitwo Zukitwo-Shell Zukiwi
 	default
 }
