@@ -28,7 +28,6 @@ DEPEND="
 	~dev-qt/qtsql-${PV}[debug=]
 	~dev-qt/qtprintsupport-${PV}[debug=]
 	~dev-qt/qtxml-${PV}[debug=]
-	dev-qt/designer:5
 "
 RDEPEND="${DEPEND}"
 
@@ -37,15 +36,19 @@ QT5_TARGET_SUBDIRS=(
 	src/assistant
 	src/pixeltool
 	src/qtestlib
-	src/linguist
-	src/qdbus
 	src/qtpaths
 
 	src/qtconfig
 	src/qev
 	src/qconfig
 	src/kmap2qmap
+
+	src/tools/qdoc
 )
+
+# Separate ebuild in Qt overlay
+# src/linguist
+# src/qdbus
 
 # Can't work on Linux
 # src/macdeployqt
@@ -76,6 +79,9 @@ src_prepare() {
 
 	# Fix sandbox violation when runing qmake
 	sed -i 's+\$\$eval(QT\.uitools\.libs)/++' "${S}/src/linguist/linguist.pro" || die
+
+	# Fix QT_SOURCE_TREE
+	sed -i 's+\$\$QT_SOURCE_TREE+'"${S}"'+g' "${S}/src/tools/qdoc/qdoc.pro" || die
 
 	qt5-build_src_prepare
 }
