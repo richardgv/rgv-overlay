@@ -142,7 +142,7 @@ src_install() {
 	# dobin "${CMAKE_BUILD_DIR}"/{glretrace,apitrace}
 	# use qt4 && dobin "${CMAKE_BUILD_DIR}"/qapitrace
 
-	my_android_foreach_variant my_android_src_install
+	use android && my_android_foreach_variant my_android_src_install
 	# for ABI in $(get_install_abis) ; do
 	# 	CMAKE_BUILD_DIR="${WORKDIR}/${P}_build-${ABI}"
 	# 	exeinto /usr/$(get_libdir)/${PN}/wrappers
