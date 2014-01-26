@@ -7,12 +7,12 @@ inherit fdo-mime gnome2-utils mono versionator eutils
 
 DESCRIPTION="Integrated Development Environment for .NET"
 HOMEPAGE="http://www.monodevelop.com/"
-MY_EXTRA_PV=1
+MY_EXTRA_PV=2
 SRC_URI="http://download.mono-project.com/sources/${PN}/${P}-${MY_EXTRA_PV}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
 IUSE="+subversion +git doc"
 
 RDEPEND=">=dev-lang/mono-3.0
