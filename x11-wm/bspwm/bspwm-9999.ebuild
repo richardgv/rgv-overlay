@@ -1,37 +1,52 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/x11-wm/bspwm/bspwm-0.8.8.ebuild,v 1.1 2014/01/24 08:20:56 radhermit Exp $
 
 EAPI=5
+inherit eutils toolchain-funcs git-r3
 
-inherit git-2
+DESCRIPTION="Tiling window manager based on binary space partitioning"
+HOMEPAGE="https://github.com/baskerville/bspwm/"
+EGIT_REPO_URI="https://github.com/baskerville/bspwm.git"
 
-DESCRIPTION="tiling window manager based on binary space partitioning"
-HOMEPAGE="https://github.com/baskerville/bspwm"
-SRC_URI=""
-EGIT_REPO_URI="https://github.com/baskerville/bspwm"
-
-LICENSE="MIT"
+LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="debug"
+IUSE="debug examples"
 
-DEPEND="~x11-misc/sxhkd-${PV}
+DEPEND="
 	x11-libs/libxcb
-	x11-libs/xcb-util
-	x11-libs/xcb-util-wm"
-RDEPEND="${DEPEND}"
+	x11-libs/xcb-util-wm
+"
+RDEPEND="${DEPEND}
+	x11-misc/sxhkd
+"
 
 src_prepare() {
-	sed -i 's/LDFLAGS += -s/LDFLAGS += /' "${S}/Makefile" || die
+	epatch "${FILESDIR}"/${P}-flags.patch
 }
 
 src_compile() {
-	local tgt=all
-	use debug && tgt=debug
-	emake $tgt
+	local target="all"
+	use debug && target="debug"
+	emake PREFIX=/usr CC="$(tc-getCC)" "$target"
 }
 
 src_install() {
-	emake DESTDIR="${ED}" PREFIX="${EPREFIX}/usr" install
+	emake DESTDIR="${D}" PREFIX=/usr install
+	dodoc doc/{CONTRIBUTING,MISC,TODO}.md
+
+	exeinto /etc/X11/Sessions
+	newexe "${FILESDIR}"/${PN}-session ${PN}
+
+	insinto /usr/share/xsessions
+	doins contrib/lightdm/bspwm.desktop
+
+	insinto /etc/xdg/sxhkd
+	doins examples/sxhkdrc
+
+	if use examples ; then
+		dodoc -r examples
+		docompress -x /usr/share/doc/${PF}/examples
+	fi
 }

@@ -20,18 +20,24 @@ DEPEND="dev-qt/qtcore:4
 	dev-qt/qtgui:4
 	dev-qt/qtxmlpatterns:4
 	dev-qt/qtwebkit:4
-	dev-cpp/clucene
-	dev-db/sqlite:3"
+	!bundled-libs? (
+		dev-cpp/clucene
+		dev-libs/crypto++
+		dev-libs/quazip
+		sys-libs/zlib
+		dev-db/sqlite:3
+		)"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
 	if ! use bundled-libs; then
 		# Drop bundled clucene and crypto++
-		rm -r "${S}/lib" || die
+		rm -r "${S}/lib/"{clucene,cryptopp,quazip,zlib} || die
 		sed -i \
-			-e 's+add_subdirectory(lib/clucene)++' \
-			-e 's+add_subdirectory(lib/cryptopp)++' \
-			"${S}/CMakeLists.txt" || die
+			-e 's+add_subdirectory(clucene)++' \
+			-e 's+add_subdirectory(cryptopp)++' \
+			-e 's+add_subdirectory(quazip)++' \
+			"${S}/lib/CMakeLists.txt" || die
 		sed -i \
 			-e 's+^[[:space:]]*${CMAKE_BINARY_DIR}/lib.*$++' \
 			-e 's+cryptlib+cryptopp+' \
@@ -62,10 +68,6 @@ EOF
 		# Fix underlinking in sqlite3
 		sed -i 's+^\(target_link_libraries(${PROJECT_NAME}\)+\1 dl pthread+' "${S}/src/CMakeLists.txt" || die
 	fi
-
-
-	# Fix QA notice about .desktop file
-	sed -i 's/QT/Qt/' "${S}/share/applications/wiznote.desktop" || die
 
 	cmake-utils_src_prepare
 }
