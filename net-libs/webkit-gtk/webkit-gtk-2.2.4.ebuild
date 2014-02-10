@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-2.2.4-r200.ebuild,v 1.5 2014/02/06 19:14:09 pacho Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-libs/webkit-gtk/webkit-gtk-2.2.4.ebuild,v 1.5 2014/02/06 19:14:09 pacho Exp $
 
 EAPI="5"
 
@@ -14,7 +14,7 @@ HOMEPAGE="http://www.webkitgtk.org/"
 SRC_URI="http://www.webkitgtk.org/releases/${MY_P}.tar.xz"
 
 LICENSE="LGPL-2+ BSD"
-SLOT="2"
+SLOT="3/29" # soname version
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~x86-freebsd ~amd64-linux ~ia64-linux ~x86-linux ~x86-macos"
 IUSE="aqua coverage debug +egl +geoloc gles2 +gstreamer +introspection +jit libsecret +opengl spell +webgl"
 # bugs 372493, 416331
@@ -27,6 +27,9 @@ REQUIRED_USE="
 "
 
 # use sqlite, svg by default
+# Aqua support in gtk3 is untested
+# gtk2 is needed for plugin process support
+# gtk3-3.10 required for wayland
 RDEPEND="
 	dev-libs/libxml2:2
 	dev-libs/libxslt
@@ -36,6 +39,7 @@ RDEPEND="
 	>=media-libs/libpng-1.4:0=
 	>=x11-libs/cairo-1.10:=[X]
 	>=dev-libs/glib-2.36.0:2
+	>=x11-libs/gtk+-3.6.0:3[aqua=,introspection?]
 	>=dev-libs/icu-3.8.1-r1:=
 	>=net-libs/libsoup-2.42.0:2.4[introspection?]
 	dev-db/sqlite:3=
@@ -70,6 +74,7 @@ DEPEND="${RDEPEND}
 		virtual/rubygems[ruby_targets_ruby21]
 		virtual/rubygems[ruby_targets_ruby19]
 		virtual/rubygems[ruby_targets_ruby18] )
+	>=app-accessibility/at-spi2-core-2.5.3
 	>=dev-util/gtk-doc-am-1.10
 	dev-util/gperf
 	>=sys-devel/bison-2.4.3
@@ -212,6 +217,7 @@ src_configure() {
 	# TODO: Check Web Audio support
 	# should somehow let user select between them?
 	#
+	# * Aqua support in gtk3 is untested
 	# * dependency-tracking is required so parallel builds won't fail
 	econf \
 		$(use_enable coverage) \
@@ -227,8 +233,7 @@ src_configure() {
 		$(use_enable spell spellcheck) \
 		$(use_enable webgl) \
 		$(use_enable webgl accelerated-compositing) \
-		--with-gtk=2.0 \
-		--disable-webkit2 \
+		--with-gtk=3.0 \
 		--enable-dependency-tracking \
 		--disable-gtk-doc \
 		$(usex aqua "--with-font-backend=pango --with-target=quartz" "")
@@ -259,10 +264,6 @@ src_install() {
 
 	# Prevents crashes on PaX systems
 	use jit && pax-mark m "${ED}usr/bin/jsc-3"
-
-	# File collisions with slot 3
-	# bug #402699, https://bugs.webkit.org/show_bug.cgi?id=78134
-	rm -rf "${ED}usr/share/gtk-doc" || die
 }
 
 nvidia_check() {
