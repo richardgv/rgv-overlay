@@ -6,9 +6,11 @@ EAPI=5
 
 inherit games
 
+MY_PV="dd"
+MY_P="${PN}-${MY_PV}"
 DESCRIPTION="A UCI chess engine"
 HOMEPAGE="http://www.stockfishchess.com/"
-SRC_URI="http://cl.ly/2n1O3h2d3u2W/download/stockfish-3-linux.zip
+SRC_URI="https://s3.amazonaws.com/stockfish/${MY_P}-src.zip
 	http://cl.ly/3x333m0G173F/download/stockfish-231-book.zip"
 
 LICENSE="GPL-3"
@@ -21,11 +23,8 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
-	if use c++0x; then
-		S="${WORKDIR}/${P}-linux/src_c11"
-	else
-		S="${WORKDIR}/${P}-linux/src"
-	fi
+	S="${WORKDIR}/${MY_P}-src/src"
+	use c++0x && S+="_c11"
 }
 
 src_prepare() {
@@ -50,11 +49,11 @@ src_compile() {
 src_install() {
 	dogamesbin "${PN}"
 
-	cd "${WORKDIR}/${P}-linux"
+	cd "${S}/.." || die
 	insinto "${GAMES_DATADIR}/${PN}"
 	doins logo.bmp polyglot.ini
-	dodoc Readme.txt
+	dodoc Readme.md
 
-	cd "${WORKDIR}"
+	cd "${WORKDIR}" || die
 	doins Book.bin
 }
