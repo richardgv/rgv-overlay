@@ -56,6 +56,6 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	# rm -f "${D}/usr/bin/tintwizard.py"
-	python_convert_shebangs 2 "${ED}/usr/bin/tintwizard.py"
+
+	use tint2conf && python_convert_shebangs 2 "${ED}/usr/bin/tintwizard.py"
 }

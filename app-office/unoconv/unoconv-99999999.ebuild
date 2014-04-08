@@ -36,8 +36,10 @@ src_prepare() {
 	python_fix_shebang "${S}"
 }
 
-src_compile() { :; }
+src_compile() {
+	emake doc
+}
 
 src_install() {
-	emake doc-install install install-links DESTDIR="${D}" || die
+	emake DESTDIR="${ED}" install install-links
 }
