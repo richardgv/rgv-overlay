@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-28.0.ebuild,v 1.1 2014/03/21 03:29:19 anarchy Exp $
+# $Header: /var/cvsroot/gentoo-x86/www-client/firefox/firefox-29.0.ebuild,v 1.1 2014/05/01 13:27:03 anarchy Exp $
 
 EAPI="5"
 VIRTUALX_REQUIRED="pgo"
@@ -25,7 +25,7 @@ if [[ ${MOZ_ESR} == 1 ]]; then
 fi
 
 # Patch version
-PATCH="${PN}-28.0-patches-0.1"
+PATCH="${PN}-29.0-patches-0.1"
 # Upstream ftp release URI that's used by mozlinguas.eclass
 # We don't use the http mirror because it deletes old tarballs.
 MOZ_FTP_URI="ftp://ftp.mozilla.org/pub/${PN}/releases/"
@@ -39,8 +39,7 @@ HOMEPAGE="http://www.mozilla.com/firefox"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
 SLOT="0"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="bindist gstreamer +jit +minimal pgo pulseaudio selinux system-cairo system-icu system-jpeg system-sqlite test"
-RESTRICT="mirror"
+IUSE="bindist gstreamer hardened +jit +minimal pgo pulseaudio selinux system-cairo system-icu system-jpeg system-sqlite test"
 
 # More URIs appended below...
 SRC_URI="${SRC_URI}
@@ -63,7 +62,7 @@ RDEPEND="
 	system-icu? ( >=dev-libs/icu-51.1 )
 	system-jpeg? ( >=media-libs/libjpeg-turbo-1.2.1 )
 	system-sqlite? ( >=dev-db/sqlite-3.8.1.3:3[secure-delete,debug=] )
-	>=media-libs/libvpx-1.0.0
+	>=media-libs/libvpx-1.3.0
 	kernel_linux? ( media-libs/alsa-lib )
 	selinux? ( sec-policy/selinux-mozilla )"
 
@@ -170,7 +169,6 @@ src_prepare() {
 	# Fix sandbox violations during make clean, bug 372817
 	sed -e "s:\(/no-such-file\):${T}\1:g" \
 		-i "${S}"/config/rules.mk \
-		-i "${S}"/js/src/config/rules.mk \
 		-i "${S}"/nsprpub/configure{.in,} \
 		|| die
 
@@ -206,6 +204,9 @@ src_configure() {
 	# It doesn't compile on alpha without this LDFLAGS
 	use alpha && append-ldflags "-Wl,--no-relax"
 
+	# Add full relro support for hardened
+	use hardened && append-ldflags "-Wl,-z,relro,-z,now"
+
 	# We must force enable jemalloc 3 threw .mozconfig
 	echo "export MOZ_JEMALLOC=1" >> ${S}/.mozconfig || die
 
@@ -218,6 +219,7 @@ src_configure() {
 	mozconfig_annotate '' --disable-mailnews
 	mozconfig_annotate '' --with-system-png
 	mozconfig_annotate '' --enable-system-ffi
+	mozconfig_annotate '' --disable-gold
 
 	# Other ff-specific settings
 	mozconfig_annotate '' --with-default-mozilla-five-home=${MOZILLA_FIVE_HOME}

@@ -4,7 +4,7 @@
 
 EAPI=5
 
-USE_RUBY="ruby18 ruby19 ruby20 ree18 jruby"
+USE_RUBY="ruby18 ruby19 ruby20 ruby21 ree18 jruby"
 
 # RUBY_FAKEGEM_TASK_DOC=""
 # RUBY_FAKEGEM_DOCDIR="doc"
@@ -24,6 +24,6 @@ IUSE=""
 
 # ruby_add_bdepend "doc? ( >=dev-ruby/yard-0.5.3 >=dev-ruby/maruku-0.5.9 )"
 
-ruby_add_rdepend ">=dev-ruby/chunky_png-1.2 >=dev-ruby/sass-3.1"
+ruby_add_rdepend ">=dev-ruby/chunky_png-1.2 >=dev-ruby/sass-3.2.18"
 
 # RUBY_PATCHES=( "${FILESDIR}/${PN}-2001_frameworks_in_usr-share.patch" )
