@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-6.0.37.ebuild,v 1.1 2014/04/24 13:37:42 jlec Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-6.0.37-r1.ebuild,v 1.1 2014/04/30 14:37:52 jlec Exp $
 
 EAPI=5
 
@@ -69,6 +69,7 @@ src_install() {
 		dohtml -r doc/html/*
 	fi
 
+	mv doc/man/man3/{,cuda-}deprecated.3 || die
 	doman doc/man/man*/*
 
 	use debugger || remove+=" bin/cuda-gdb extras/Debugger"

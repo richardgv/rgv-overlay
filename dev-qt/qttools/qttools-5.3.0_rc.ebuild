@@ -7,8 +7,10 @@ EAPI=5
 inherit qt5-build
 
 # makeqpf don't build without qtbase source around
-# SRC_URI+=" http://releases.qt-project.org/qt5/${PV}/submodules/qtbase-opensource-src-${PV}.tar.xz"
-SRC_URI+=" http://download.qt-project.org/official_releases/qt/${PV%.*}/${PV/_/-}/submodules/qtbase-opensource-src-${PV/_/-}.tar.xz"
+MY_PV="${PV/rc/RC}"
+MY_PV="${MY_PV/_/-}"
+QTBASE_P="qtbase-opensource-src-${MY_PV}"
+SRC_URI+=" http://download.qt-project.org/development_releases/qt/${PV%.*}/${MY_PV}/submodules/${QTBASE_P}.tar.xz"
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 
@@ -67,7 +69,7 @@ src_unpack() {
 	qt5-build_src_unpack
 
 	# Hard link qtbase files over
-	cp -lrn "${WORKDIR}/qtbase-opensource-src-${PV/_/-}/"* "${S}" || die
+	cp -lrn "${WORKDIR}/${QTBASE_P}/"* "${S}" || die
 }
 
 src_prepare() {
