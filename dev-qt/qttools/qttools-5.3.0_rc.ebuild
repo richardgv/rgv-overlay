@@ -35,7 +35,6 @@ RDEPEND="${DEPEND}"
 
 # Somehow, order changes may break some builds
 QT5_TARGET_SUBDIRS=(
-	src/assistant
 	src/pixeltool
 	src/qtestlib
 	src/qtpaths
