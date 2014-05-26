@@ -10,7 +10,7 @@ inherit qt5-build
 MY_PV="${PV/rc/RC}"
 MY_PV="${MY_PV/_/-}"
 QTBASE_P="qtbase-opensource-src-${MY_PV}"
-SRC_URI+=" http://download.qt-project.org/development_releases/qt/${PV%.*}/${MY_PV}/submodules/${QTBASE_P}.tar.xz"
+SRC_URI+=" http://download.qt-project.org/official_releases/qt/${PV%.*}/${MY_PV}/submodules/${QTBASE_P}.tar.xz"
 
 DESCRIPTION="The Qt toolkit is a comprehensive C++ application development framework"
 
