@@ -33,11 +33,20 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}/${P}-with.patch"
+	"${FILESDIR}/${PN}-1.7.1-pclconfig-vtkfiltering.patch"
 )
 
 CMAKE_BUILD_TYPE="Release"
 
 S="${WORKDIR}/${PN}-${P}"
+
+src_prepare() {
+	# Doesn't compile with Qt 5
+	# http://www.pcl-users.org/R-X86-64-PC32-error-compiling-PCL-in-Ubuntu-td4030331.html
+	sed -i 's+include(cmake/pcl_find_qt5.cmake)++' "${S}/CMakeLists.txt" || die
+
+	cmake-utils_src_prepare
+}
 
 src_configure() {
 	local mycmakeargs=(
