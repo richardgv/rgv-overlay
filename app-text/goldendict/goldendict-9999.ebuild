@@ -24,9 +24,15 @@ RDEPEND="
 	media-libs/libvorbis
 	sys-libs/zlib
 	x11-libs/libXtst
+	dev-libs/eb
+	dev-libs/lzo
+	media-libs/libao
+	virtual/ffmpeg
+	media-libs/tiff
 	>=dev-qt/qtcore-4.5:4[exceptions,qt3support]
 	>=dev-qt/qtgui-4.5:4[exceptions,qt3support]
 	>=dev-qt/qtwebkit-4.5:4[exceptions]
+	>=dev-qt/qthelp-4.5:4
 	!kde? ( || (
 		>=dev-qt/qtphonon-4.5:4[exceptions]
 		media-libs/phonon

@@ -10,8 +10,13 @@ DESCRIPTION="Eclipse SDK (binary)"
 HOMEPAGE="http://www.eclipse.org/cdt/"
 
 MY_PN="eclipse-standard"
-MY_VM="kepler"
-MY_VS="SR$(get_version_component_range 3)"
+MY_VM="luna"
+MY_VS_RAW="$(get_version_component_range 3)"
+if [ -z "$MY_VS_RAW" ]; then
+	MY_VS="R"
+else
+	MY_VS="SR$(get_version_component_range 3)"
+fi
 MY_V="${MY_VM}-${MY_VS}"
 MY_P="${MY_PN}-${MY_V}"
 
@@ -19,7 +24,7 @@ SRC_BASE="http://mirror.bjtu.edu.cn/eclipse/technology/epp/downloads/release/${M
 
 SRC_URI="
 	amd64? ( ${SRC_BASE}-x86_64.tar.gz )
-	x86? ( ${SRC_BASE}.tar.gz )
+	!amd64? ( x86? ( ${SRC_BASE}.tar.gz ) )
 "
 RESTRICT="mirror"
 
