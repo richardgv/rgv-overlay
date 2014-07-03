@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -13,7 +13,7 @@ DESCRIPTION="The Qt toolkit is a comprehensive C++ application development frame
 if [[ ${QT5_BUILD_TYPE} == live ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~x86"
 fi
 
 IUSE="accessibility gtkstyle"
@@ -27,6 +27,11 @@ DEPEND="
 	)
 "
 RDEPEND="${DEPEND}"
+
+PATCHES=(
+	# http://blog.martin-graesslin.com/blog/2014/06/where-are-my-systray-icons/
+	"${FILESDIR}/${PN}-5.3.1-prefer-qpa.patch"
+)
 
 QT5_TARGET_SUBDIRS=(
 	src/tools/uic

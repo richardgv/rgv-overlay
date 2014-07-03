@@ -20,7 +20,7 @@ fi
 MY_V="${MY_VM}-${MY_VS}"
 MY_P="${MY_PN}-${MY_V}"
 
-SRC_BASE="http://mirror.bjtu.edu.cn/eclipse/technology/epp/downloads/release/${MY_VM}/${MY_VS}/${MY_P}-linux-gtk"
+SRC_BASE="http://mirror.bit.edu.cn/eclipse/technology/epp/downloads/release/${MY_VM}/${MY_VS}/${MY_P}-linux-gtk"
 
 SRC_URI="
 	amd64? ( ${SRC_BASE}-x86_64.tar.gz )
