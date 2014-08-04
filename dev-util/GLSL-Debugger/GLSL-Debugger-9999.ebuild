@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/XenonofArcticus/GLSL-Debugger.git"
 LICENSE="BSD-3"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="+mesa"
 
 DEPEND="virtual/opengl
 	media-libs/glew
@@ -22,13 +22,21 @@ DEPEND="virtual/opengl
 	dev-qt/qtgui:4
 	dev-qt/qtopengl:4
 	x11-libs/libX11
-	media-libs/freeglut"
+	media-libs/freeglut
+	mesa? ( media-libs/mesa )"
 RDEPEND="${DEPEND}"
 
 pkg_setup() {
 	# -std=c++11 is added in CMakeLists.txt but cmake-utils.eclass overrides
 	# it, so we add it back here
 	append-cxxflags -std=c++11
+}
+
+src_configure() {
+	local mycmakeargs=(
+		$(cmake-utils_use_use mesa)
+	)
+	cmake-utils_src_configure
 }
 
 src_install() {

@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-6.0.37-r3.ebuild,v 1.1 2014/06/16 20:30:02 jlec Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-util/nvidia-cuda-toolkit/nvidia-cuda-toolkit-6.0.37-r4.ebuild,v 1.1 2014/07/14 08:53:09 jlec Exp $
 
 EAPI=5
 
@@ -106,13 +106,14 @@ src_install() {
 	mv * "${ED}"${cudadir}
 
 	cat > "${T}"/99cuda <<- EOF
-		PATH=${ecudadir}/bin:${ecudadir}/libnvvp
+		PATH=${ecudadir}/bin$(use profiler && echo ":${ecudadir}/libnvvp")
 		ROOTPATH=${ecudadir}/bin
 		LDPATH=${ecudadir}/lib$(use amd64 && echo "64:${ecudadir}/lib")
 	EOF
 	doenvd "${T}"/99cuda
 
-	make_wrapper nvprof "${EPREFIX}"${cudadir}/bin/nvprof "." ${ecudadir}/lib$(use amd64 && echo "64:${ecudadir}/lib")
+	use profiler && \
+		make_wrapper nvprof "${EPREFIX}"${cudadir}/bin/nvprof "." ${ecudadir}/lib$(use amd64 && echo "64:${ecudadir}/lib")
 
 	dobin "${T}"/cuda-config
 }
