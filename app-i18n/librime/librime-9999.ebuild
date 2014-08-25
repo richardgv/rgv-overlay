@@ -22,7 +22,8 @@ RDEPEND="app-i18n/opencc
 	dev-db/kyotocabinet
 	>=dev-libs/boost-1.46.0[threads(+)]
 	sys-libs/zlib
-	x11-proto/xproto"
+	x11-proto/xproto
+	dev-libs/marisa"
 DEPEND="${RDEPEND}
 	test? ( dev-cpp/gtest )"
 
