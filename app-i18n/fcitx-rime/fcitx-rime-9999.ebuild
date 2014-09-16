@@ -17,7 +17,7 @@ KEYWORDS=""
 IUSE=""
 
 RDEPEND=">=app-i18n/fcitx-4.2.8
-	~app-i18n/librime-${PV}
+	>=app-i18n/librime-1.1
 	app-i18n/rime-data
 	x11-libs/libnotify"
 DEPEND="${RDEPEND}"
