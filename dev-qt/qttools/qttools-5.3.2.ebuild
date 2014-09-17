@@ -47,7 +47,8 @@ QT5_TARGET_SUBDIRS=(
 	src/tools/qdoc
 )
 
-# Separate ebuild in Qt overlay
+# Separate ebuild
+# src/assistant
 # src/linguist
 # src/qdbus
 
@@ -62,7 +63,7 @@ QT5_TARGET_SUBDIRS=(
 # src/qtconcurrent/codegenerator
 # src/qtconcurrent/generaterun
 
-PATCHES=( "${FILESDIR}/${P}-qtconfig.patch" )
+PATCHES=( "${FILESDIR}/${PN}-5.3.1-qtconfig.patch" )
 
 src_unpack() {
 	qt5-build_src_unpack
