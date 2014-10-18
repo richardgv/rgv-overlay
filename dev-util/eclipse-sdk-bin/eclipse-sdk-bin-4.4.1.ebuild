@@ -6,10 +6,10 @@ EAPI=5
 
 inherit eutils versionator
 
-DESCRIPTION="Eclipse SDK (binary)"
+DESCRIPTION="Eclipse IDE for Java developers (binary)"
 HOMEPAGE="http://www.eclipse.org/cdt/"
 
-MY_PN="eclipse-standard"
+MY_PN="eclipse-java"
 MY_VM="luna"
 MY_VS_RAW="$(get_version_component_range 3)"
 if [ -z "$MY_VS_RAW" ]; then
