@@ -36,6 +36,6 @@ src_prepare() {
 
 src_install() {
 	insinto /usr/share/themes
-	doins -r Zukitre Zukitwo Zukitwo-Shell Zukiwi
+	doins -r $(find . -maxdepth 1 -type d)
 	default
 }
