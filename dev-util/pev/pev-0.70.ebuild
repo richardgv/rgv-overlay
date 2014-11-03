@@ -16,13 +16,16 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 
+S="${WORKDIR}/${PN}"
+
 src_prepare() {
-	sed -i 's/gzip -c -9 /cat /g' "${S}/src/Makefile" || die
-	sed -i 's/sizeof(buff)/LINE_BUFFER/g' "${S}/src/pestr.c" || die
-	sed -i 's/sizeof(str)/100/g' "${S}/src/pestr.c" || die
+	# Don't compress man page: Portage should take care of it
+	sed -i 's/gzip -c -9 \([^ ][^ ]*\) > \([^ ][^ ]*\)\.gz /cp \1 \2 /g' "${S}/src/Makefile" || die
+
+	# Don't strip: Portage should take care of it
 	sed -i 's/^[[:space:]]*\$(STRIP).*//g' "${S}/lib/libpe/Makefile" || die
 }
 
 src_install() {
-	emake DESTDIR="${ED}" SHAREDIR="${ED}/usr/share" MANDIR="${ED}/usr/share/man/man1" install
+	emake DESTDIR="${ED}" datarootdir="${ED}/usr/share" install
 }
