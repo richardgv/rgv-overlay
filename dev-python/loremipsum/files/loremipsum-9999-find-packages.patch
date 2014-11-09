@@ -1,0 +1,10 @@
+diff --git a/setup.py b/setup.py
+index 7de2f0d..b5891fd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -34,4 +34,5 @@ EGG = {
+ 
+ if __name__ == '__main__':
+     import setuptools
++    EGG['packages'] = setuptools.find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
+     setuptools.setup(**EGG)
