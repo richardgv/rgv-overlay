@@ -1,0 +1,14 @@
+--- loremipsum-1.0.5/loremipsum/generator.py~	2014-11-10 11:03:45.460022453 +0800
++++ loremipsum-1.0.5/loremipsum/generator.py	2014-11-10 11:03:51.540022475 +0800
+@@ -23,7 +23,10 @@
+ _WORD_DELIMITERS = [','] + _SENTENCE_DELIMITERS
+ 
+ _SAMPLE = resource_string(__name__, 'default/sample.txt')
+-_DICTIONARY = resource_string(__name__, 'default/dictionary.txt').split()
++_DICTIONARY = resource_string(__name__, 'default/dictionary.txt')
++if sys.version >= '3':
++    _DICTIONARY = _DICTIONARY.decode('utf-8')
++_DICTIONARY = _DICTIONARY.split()
+ 
+ _LOREM_IPSUM = 'lorem ipsum dolor sit amet, consecteteur adipiscing elit'
+ 
