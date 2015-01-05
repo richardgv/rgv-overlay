@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-php/xdebug/xdebug-2.2.5.ebuild,v 1.1 2014/10/02 15:09:37 grknight Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-php/xdebug/xdebug-2.2.6.ebuild,v 1.1 2015/01/04 04:03:40 grknight Exp $
 
 EAPI="5"
 PHP_EXT_NAME="xdebug"
