@@ -9,7 +9,7 @@ inherit eutils autotools-utils
 DESCRIPTION="Unagi Compositing Manager"
 HOMEPAGE="http://projects.mini-dweeb.org/projects/unagi"
 
-MY_SRC_ID="111"
+MY_SRC_ID="114"
 SRC_URI="http://projects.mini-dweeb.org/attachments/download/${MY_SRC_ID}/${P}.tar.gz"
 
 LICENSE="GPL-3"
