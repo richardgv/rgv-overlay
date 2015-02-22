@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/x11-wm/bspwm/bspwm-0.8.8.ebuild,v 1.1 2014/01/24 08:20:56 radhermit Exp $
+# $Header: /var/cvsroot/gentoo-x86/x11-wm/bspwm/bspwm-0.8.9.ebuild,v 1.1 2014/06/25 05:43:41 radhermit Exp $
 
 EAPI=5
 inherit eutils toolchain-funcs git-r3
@@ -33,20 +33,5 @@ src_compile() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" PREFIX=/usr install
-	dodoc doc/{CONTRIBUTING,MISC,TODO}.md
-
-	exeinto /etc/X11/Sessions
-	newexe "${FILESDIR}"/${PN}-session ${PN}
-
-	insinto /usr/share/xsessions
-	doins contrib/lightdm/bspwm.desktop
-
-	insinto /etc/xdg/sxhkd
-	doins examples/sxhkdrc
-
-	if use examples ; then
-		dodoc -r examples
-		docompress -x /usr/share/doc/${PF}/examples
-	fi
+	emake DESTDIR="${D}" PREFIX=/usr DOCPREFIX="/usr/share/doc/${P}" install
 }
