@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,7 +16,7 @@ ESVN_REPO_URI="http://tint2.googlecode.com/svn/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="battery examples tint2conf"
+IUSE="battery examples tint2conf startup-notification svg"
 
 COMMON_DEPEND="dev-libs/glib:2
 	x11-libs/cairo
@@ -26,8 +26,10 @@ COMMON_DEPEND="dev-libs/glib:2
 	x11-libs/libXdamage
 	x11-libs/libXcomposite
 	x11-libs/libXrender
-	x11-libs/libXrandr
-	media-libs/imlib2[X]
+	>=x11-libs/libXrandr-1.3
+	>=media-libs/imlib2-1.4.2[X]
+	startup-notification? ( >=x11-libs/startup-notification-0.12 )
+	svg? ( >=gnome-base/librsvg-2.14.0 )
 	!x11-misc/tintwizard"
 DEPEND="${COMMON_DEPEND}
 	virtual/pkgconfig
@@ -36,9 +38,11 @@ RDEPEND="${COMMON_DEPEND}"
 
 # S="${WORKDIR}/${MY_P}"
 
+PATCHES=( "${FILESDIR}/${P}-gtk-icon-cache.sandbox.patch" )
+
 src_prepare() {
-	default
-	# epatch "${FILESDIR}/battery_segfault.patch" # bug 343963
+	subversion_src_prepare
+	cmake-utils_src_prepare
 }
 
 src_configure() {
@@ -46,6 +50,8 @@ src_configure() {
 		$(cmake-utils_use_enable battery BATTERY)
 		$(cmake-utils_use_enable examples EXAMPLES)
 		$(cmake-utils_use_enable tint2conf TINT2CONF)
+		$(cmake-utils_use_enable startup-notification SN)
+		$(cmake-utils_use_enable svg RSVG)
 
 		# bug 296890
 		"-DDOCDIR=/usr/share/doc/${PF}"
