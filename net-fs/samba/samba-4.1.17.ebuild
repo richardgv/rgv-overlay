@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-4.1.15.ebuild,v 1.1 2015/01/13 08:49:48 polynomial-c Exp $
+# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-4.1.17.ebuild,v 1.1 2015/02/23 22:43:37 polynomial-c Exp $
 
 EAPI=5
 PYTHON_COMPAT=( python2_7 )
@@ -29,7 +29,7 @@ CDEPEND="${PYTHON_DEPS}
 	!bi_heimdal? ( >=app-crypt/heimdal-1.5[-ssl] )
 	dev-libs/iniparser
 	dev-libs/popt
-	sys-libs/readline
+	sys-libs/readline:=
 	virtual/libiconv
 	dev-python/subunit[${PYTHON_USEDEP}]
 	sys-apps/attr
