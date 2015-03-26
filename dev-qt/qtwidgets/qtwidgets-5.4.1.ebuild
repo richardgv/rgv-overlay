@@ -26,7 +26,7 @@ DEPEND="
 	~dev-qt/qtcore-${PV}[debug=]
 	~dev-qt/qtgui-${PV}[debug=,gles2=,opengl=,png=,xcb?]
 	gtkstyle? (
-		>=x11-libs/cairo-1.12[-qt4]
+		>=x11-libs/cairo-1.12[-qt4(-)]
 		>=x11-libs/gtk+-2.24.23-r1:2
 	)
 "
