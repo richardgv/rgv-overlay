@@ -6,7 +6,7 @@ EAPI=4
 
 DESCRIPTION="High Level Assembler"
 HOMEPAGE="http://webster.cs.ucr.edu/AsmTools/HLA/dnld.html"
-SRC_URI="http://www.plantation-productions.com/Webster/HighLevelAsm/HLAv${PV}/linux.hla.tar.gz"
+SRC_URI="http://www.plantation-productions.com/Webster/HighLevelAsm/HLAv${PV}/linux.hla.tar.gz -> ${P}.tar.gz"
 RESTRICT="mirror"
 
 LICENSE="LGPL-2.1"
@@ -16,8 +16,7 @@ IUSE=""
 
 DEPEND="
 	!dev-lang/hla
-	!dev-lang/hlalib
-	amd64? ( app-emulation/emul-linux-x86-baselibs )"
+	!dev-lang/hlalib"
 RDEPEND="${DEPEND}
 	sys-devel/binutils"
 
