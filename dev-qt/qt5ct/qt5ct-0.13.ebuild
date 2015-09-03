@@ -8,7 +8,7 @@ inherit qmake-utils
 
 DESCRIPTION="Qt5 configuration utility"
 HOMEPAGE="http://qt-apps.org/content/show.php?content=168066"
-SRC_URI="http://qt-apps.org/CONTENT/content-files/168066-${P}.tar.bz2"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 RESTRICT=mirror
 
 LICENSE="BSD"
@@ -17,14 +17,19 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=">=dev-qt/qtgui-5.4.0:5
-	>=dev-qt/qtsvg-5.4.0:5
-	>=dev-qt/qttools-5.4.0:5"
+	>=dev-qt/qtsvg-5.4.0:5"
 RDEPEND="${DEPEND}"
 
 DOCS=( AUTHORS ChangeLog ChangeLog.svn COPYING README TODO )
 
 src_configure() {
-	eqmake5 "${PN}.pro"
+	local myeqmakeargs=(
+		${PN}.pro
+		PREFIX="${EPREFIX}/usr"
+		DESKTOPDIR="${EPREFIX}/usr/share/applications"
+		ICONDIR="${EPREFIX}/usr/share/pixmaps"
+	)
+	eqmake5 ${myeqmakeargs[@]}
 }
 
 src_install() {
