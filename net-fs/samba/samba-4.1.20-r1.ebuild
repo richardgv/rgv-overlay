@@ -1,12 +1,12 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-fs/samba/samba-4.1.19.ebuild,v 1.1 2015/06/26 07:37:20 polynomial-c Exp $
+# $Id$
 
 EAPI=5
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE='threads(+)'
 
-inherit python-single-r1 waf-utils multilib linux-info systemd
+inherit python-single-r1 waf-utils multilib linux-info systemd base
 
 MY_PV="${PV/_rc/rc}"
 MY_P="${PN}-${MY_PV}"
@@ -26,8 +26,8 @@ iprint ldap quota selinux syslog systemd test winbind"
 # sys-apps/attr is an automagic dependency (see bug #489748)
 # sys-libs/pam is an automagic dependency (see bug #489770)
 CDEPEND="${PYTHON_DEPS}
-	!bi_heimdal? ( >=app-crypt/heimdal-1.5[-ssl] )
-	dev-libs/iniparser
+	!bi_heimdal? ( >=app-crypt/heimdal-1.5[-ssl,-threads] )
+	dev-libs/iniparser:0
 	dev-libs/popt
 	sys-libs/readline:=
 	virtual/libiconv
@@ -36,6 +36,7 @@ CDEPEND="${PYTHON_DEPS}
 	sys-libs/libcap
 	>=sys-libs/ntdb-1.0[python,${PYTHON_USEDEP}]
 	>=sys-libs/ldb-1.1.17
+	sys-libs/ncurses:0=
 	>=sys-libs/tdb-1.2.12[python,${PYTHON_USEDEP}]
 	>=sys-libs/talloc-2.1.2[python,${PYTHON_USEDEP}]
 	>=sys-libs/tevent-0.9.18
@@ -151,6 +152,10 @@ src_install() {
 	# Make all .so files executable
 	find "${D}" -type f -name "*.so" -exec chmod +x {} +
 
+	# install example config file
+	insinto /etc/samba
+	doins examples/smb.conf.default
+
 	# Install init script and conf.d file
 	newinitd "${CONFDIR}/samba4.initd-r1" samba
 	newconfd "${CONFDIR}/samba4.confd" samba
@@ -175,6 +180,6 @@ pkg_postinst() {
 
 	elog "For further information and migration steps make sure to read "
 	elog "http://samba.org/samba/history/${P}.html "
-	elog "http://samba.org/samba/history/${PN}-4.0.0.html and"
+	elog "http://samba.org/samba/history/${PN}-4.1.0.html and"
 	elog "http://wiki.samba.org/index.php/Samba4/HOWTO "
 }
