@@ -4,13 +4,13 @@
 
 EAPI=5
 
-inherit bzr
+inherit git-r3
 
 DESCRIPTION="Theme for GNOME 2 and 3"
 HOMEPAGE="http://gnome-look.org/content/show.php/Zukitwo?content=140562"
 SRC_URI=""
 
-EBZR_REPO_URI="lp:zukitwo"
+EGIT_REPO_URI="https://github.com/lassekongo83/zuki-themes.git"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -26,7 +26,7 @@ DEPEND="app-arch/unzip"
 
 # S="${WORKDIR}"
 
-# DOCS=( COPYING )
+DOCS=( README.md )
 
 src_prepare() {
 	# Gentoo uses normal nautilus, not nautilus-elementary
@@ -36,6 +36,7 @@ src_prepare() {
 
 src_install() {
 	insinto /usr/share/themes
-	doins -r $(find . -maxdepth 1 -type d)
+	doins -r ZukiShell Zukitre Zukitre-firefox-theme Zukitwo Zukiwi
 	default
 }
+
