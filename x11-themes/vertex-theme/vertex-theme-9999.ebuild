@@ -12,7 +12,7 @@ SRC_URI=""
 EGIT_REPO_URI="https://github.com/horst3180/Vertex-theme.git"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~x86 ~amd64"
+KEYWORDS=""
 IUSE="+gtk +gtk3 +dark +light cinnamon +metacity unity xfwm gnome-shell"
 
 DEPEND="gtk3? ( x11-themes/gnome-themes-standard )
