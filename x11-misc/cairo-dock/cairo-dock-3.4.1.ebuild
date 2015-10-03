@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -16,7 +16,7 @@ SRC_URI="http://launchpad.net/${MY_PN}/${MM_PV}/${PV}/+download/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="3"
 KEYWORDS="~amd64 ~x86"
-IUSE="crypt +xcomposite"
+IUSE="crypt desktop-manager +xcomposite"
 
 RDEPEND="
 	dev-libs/dbus-glib
@@ -27,7 +27,6 @@ RDEPEND="
 	sys-apps/dbus
 	x11-libs/cairo
 	x11-libs/pango
-	x11-libs/gtk+:2
 	x11-libs/gtkglext
 	x11-libs/libXrender
 	x11-libs/gtk+:3
@@ -43,6 +42,13 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	sys-devel/gettext
 "
+
+src_configure() {
+	mycmakeargs=(
+		$(use desktop-manager && echo "-Denable-desktop-manager=ON" || echo "-Denable-desktop-manager=OFF")
+	)
+	cmake-utils_src_configure
+}
 
 pkg_postinst() {
 	elog "Additional plugins are available to extend the functionality"

@@ -1,8 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="3"
+EAPI="5"
 
 inherit cmake-utils eutils versionator
 
@@ -11,7 +11,7 @@ MM_PV=$(get_version_component_range '1-2')
 
 DESCRIPTION="Official plugins for cairo-dock"
 HOMEPAGE="http://www.glx-dock.org"
-SRC_URI="http://launchpad.net/${MY_PN}/${MM_PV}/${PV}/+download/${P}.tar.gz"
+SRC_URI="http://launchpad.net/${MY_PN}/${MM_PV}/${PV}/+download/${MY_PN}-${PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="3"
@@ -35,13 +35,13 @@ RDEPEND="
 	kde? ( kde-base/kdelibs )
 	vte? ( x11-libs/vte )
 	vala? ( dev-lang/vala:0.12 )
-	webkit? ( >=net-libs/webkit-gtk-1.0 )
+	webkit? ( >=net-libs/webkit-gtk-1.4.0:3 )
 	xfce? ( xfce-base/thunar )
 	xgamma? ( x11-libs/libXxf86vm )
 	xklavier? ( x11-libs/libxklavier )
 	indicator3? (
 		dev-libs/libindicator:3
-		dev-libs/libdbusmenu:3[gtk]
+		dev-libs/libdbusmenu:3[gtk3]
 		x11-libs/libido:3
 		)
 	ruby? ( dev-lang/ruby )
