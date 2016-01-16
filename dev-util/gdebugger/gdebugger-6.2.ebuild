@@ -18,7 +18,8 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=""
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	media-libs/libpng:1.2"
 
 pkg_setup() {
 	use amd64 && S="${WORKDIR}/${MY_PN}${MY_PV}-x86_64"
