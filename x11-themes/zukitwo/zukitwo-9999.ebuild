@@ -11,6 +11,7 @@ HOMEPAGE="http://gnome-look.org/content/show.php/Zukitwo?content=140562"
 SRC_URI=""
 
 EGIT_REPO_URI="https://github.com/lassekongo83/zuki-themes.git"
+EGIT_BRANCH="3.18"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -18,8 +19,8 @@ KEYWORDS=""
 IUSE=""
 
 RDEPEND=">=x11-libs/gtk+-2.10:2
-	>=x11-libs/gtk+-3.8:3
-	>=x11-themes/gnome-themes-standard-3.8
+	>=x11-libs/gtk+-3.18:3
+	>=x11-themes/gnome-themes-standard-3.18
 	>=x11-themes/gtk-engines-murrine-0.98.1.1
 	!x11-themes/zukitwo-shell"
 DEPEND="app-arch/unzip"
@@ -36,7 +37,7 @@ src_prepare() {
 
 src_install() {
 	insinto /usr/share/themes
-	doins -r ZukiShell Zukitre Zukitre-firefox-theme Zukitwo Zukiwi
+	doins -r Zuki-shell Zukitre Zukitre-firefox-theme Zukitwo
 	default
 }
 
