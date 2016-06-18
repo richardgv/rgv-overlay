@@ -28,12 +28,10 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	doc? ( app-doc/doxygen )
-	sys-devel/autoconf-archive
 	virtual/pkgconfig"
 
 DOCS=( README AUTHORS ChangeLog INSTALL THANKS )
 
-AUTOTOOLS_AUTORECONF=1
 AUTOTOOLS_IN_SOURCE_BUILD=1
 
 src_configure() {
