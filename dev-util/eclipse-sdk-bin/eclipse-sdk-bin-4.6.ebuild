@@ -10,7 +10,7 @@ DESCRIPTION="Eclipse IDE for Java developers (binary)"
 HOMEPAGE="http://www.eclipse.org/cdt/"
 
 MY_PN="eclipse-java"
-MY_VM="luna"
+MY_VM="neon"
 MY_VS_RAW="$(get_version_component_range 3)"
 if [ -z "$MY_VS_RAW" ]; then
 	MY_VS="R"
@@ -36,8 +36,8 @@ IUSE=""
 DEPEND="!dev-util/eclipse-sdk
 	!dev-util/eclipse-cpp-bin"
 RDEPEND="${DEPEND}
-	>=virtual/jdk-1.6
-	x11-libs/gtk+:2"
+	>=virtual/jdk-1.8
+	net-libs/webkit-gtk:4"
 
 S="${WORKDIR}/eclipse"
 
