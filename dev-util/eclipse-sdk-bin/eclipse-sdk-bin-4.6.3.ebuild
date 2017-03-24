@@ -15,7 +15,7 @@ MY_VS_RAW="$(get_version_component_range 3)"
 if [ -z "$MY_VS_RAW" ]; then
 	MY_VS="R"
 else
-	MY_VS="SR$(get_version_component_range 3)"
+	MY_VS="$(get_version_component_range 3)"
 fi
 MY_V="${MY_VM}-${MY_VS}"
 MY_P="${MY_PN}-${MY_V}"
