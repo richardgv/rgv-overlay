@@ -26,7 +26,6 @@ DEPEND=""
 RDEPEND="${DEPEND}
 	dev-qt/qtgui:4
 	dev-qt/qtcore:4
-	dev-qt/qtwebkit:4
 	dev-qt/qtopengl:4
 	app-arch/bzip2
 	app-text/poppler[utils]"
