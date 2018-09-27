@@ -1,8 +1,7 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI=5
+EAPI=6
 
 DESCRIPTION="Open Input Framework Frame Library"
 HOMEPAGE="https://launchpad.net/frame"
@@ -17,7 +16,7 @@ RDEPEND="x11-libs/libX11
 	x11-libs/libXext
 	x11-base/xorg-server
 	>=x11-libs/libXi-1.5.99.1
-	>=x11-proto/inputproto-2.1.99.6
+	x11-base/xorg-proto
 	"
 DEPEND="${RDEPEND}
 	app-text/asciidoc
@@ -31,12 +30,4 @@ src_configure() {
 		)
 
 	econf "${myeconfargs[@]}"
-}
-
-src_install() {
-	default
-
-	local prefix="/usr"
-	mv "${ED}${prefix}/share/doc/frame/"* "${ED}${prefix}/share/doc/${P}" || die
-	rmdir "${ED}${prefix}/share/doc/frame/" || die
 }
