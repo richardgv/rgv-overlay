@@ -1,8 +1,8 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-USE_RUBY="ruby21 ruby22 ruby23 ruby24"
+USE_RUBY="ruby23 ruby24 ruby25"
 
 RUBY_FAKEGEM_TASK_TEST="test features"
 RUBY_FAKEGEM_RECIPE_DOC="rdoc"
@@ -18,7 +18,7 @@ SRC_URI="https://github.com/${PN}/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 arm ~arm64 hppa ppc ppc64 x86"
 IUSE=""
 
 ruby_add_bdepend "test? (
@@ -30,6 +30,7 @@ ruby_add_bdepend "test? (
 	dev-ruby/haml
 	dev-ruby/nokogiri
 	dev-ruby/slim
+	dev-ruby/thread_safe
 	dev-ruby/tilt )"
 
 all_ruby_prepare() {
