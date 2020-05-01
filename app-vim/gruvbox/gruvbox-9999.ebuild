@@ -13,5 +13,6 @@ KEYWORDS=""
 EGIT_REPO_URI="https://github.com/morhetz/${PN}.git"
 
 src_prepare() {
+	rm package.json || die
 	rm gruvbox_256palette*.sh || die
 }
