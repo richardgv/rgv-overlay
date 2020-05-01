@@ -1,13 +1,12 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-USE_RUBY="ruby23 ruby24 ruby25"
+USE_RUBY="ruby24 ruby25 ruby26 ruby27"
 
 RUBY_FAKEGEM_RECIPE_TEST="rspec3"
 
-RUBY_FAKEGEM_RECIPE_DOC="rdoc"
 RUBY_FAKEGEM_EXTRADOC="CHANGELOG.adoc LICENSE.txt README.adoc"
 
 RUBY_FAKEGEM_GEMSPEC="${PN}.gemspec"
@@ -23,14 +22,14 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-ruby_add_rdepend "=dev-ruby/asciidoctor-1.5*"
+ruby_add_rdepend ">=dev-ruby/asciidoctor-1.5.7 <dev-ruby/asciidoctor-3"
 
 all_ruby_prepare() {
 	rm Gemfile || die
 	sed -i -e '/c.formatter/ s:^:#:' spec/test_helper.rb || die
 
 	# Avoid specs for unpackaged tools
-	rm -f spec/{a2s,blockdiag,erd,mermaid,msc,shaape,svgbob,syntrax,umlet,vega,wavedrom}_spec.rb || die
+	rm -f spec/{a2s,blockdiag,bpmn,bytefield,erd,mermaid,msc,nomnoml,shaape,smcat,svgbob,syntrax,umlet,vega,wavedrom}_spec.rb || die
 }
 
 all_ruby_install() {
